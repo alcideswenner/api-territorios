@@ -25,11 +25,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Optional<UserDTO> saveUser(UserDTO userDTO) {
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-
-        User user = userRepository.save(new User(userDTO));
-        return Optional.of(user).map(e -> new UserDTO(e));
+    public Optional<User> saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return Optional.of(userRepository.save(user));
     }
 
     @Override

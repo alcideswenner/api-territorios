@@ -2,7 +2,6 @@ package com.alcideswenner.apiterritorios.entities;
 
 import java.util.List;
 import javax.persistence.*;
-import com.alcideswenner.apiterritorios.dto.UserDTO;
 import lombok.*;
 
 @Entity
@@ -26,20 +25,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Designacao> designacao;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Permissao> permissao;
-
-    public User(UserDTO userDTO) {
-        this.id = userDTO.getId();
-        this.name = userDTO.getName();
-        this.username = userDTO.getUsername();
-        this.password = userDTO.getPassword();
-        this.designacao = userDTO.getDesignacao();
-        this.permissao = userDTO.getPermissao().stream().map(e -> {
-            e.setUser(this);
-            return e;
-        }).toList();
-    }
 
     public void setPermissao(List<Permissao> permissao) {
         this.permissao = permissao.stream().map(e -> {
@@ -47,5 +34,4 @@ public class User {
             return e;
         }).toList();
     }
-
 }

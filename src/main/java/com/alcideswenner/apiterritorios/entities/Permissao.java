@@ -35,7 +35,7 @@ public class Permissao {
     private String descricao;
 
     @ManyToOne
-    @JoinColumn(name = "permissao_user")
+    @JoinColumn(name = "id_user")
     private User user;
 
     public Permissao(PermissaoDTO dto) {
