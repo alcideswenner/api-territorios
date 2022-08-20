@@ -18,6 +18,8 @@ public class Designacao {
 
     private LocalDateTime dataDesignacao;
 
+    private LocalDateTime dataCarencia;
+
     private LocalDateTime dataConclusao;
 
     @ManyToOne
