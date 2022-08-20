@@ -25,7 +25,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Designacao> designacao;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Permissao> permissao;
 
     public void setPermissao(List<Permissao> permissao) {
