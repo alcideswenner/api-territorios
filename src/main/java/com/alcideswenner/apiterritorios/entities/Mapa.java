@@ -1,5 +1,6 @@
 package com.alcideswenner.apiterritorios.entities;
 
+import java.util.List;
 import javax.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @Setter
 @Table(name = "tb_mapa")
 public class Mapa {
-        
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +24,6 @@ public class Mapa {
 
     private Boolean status;
 
-    @OneToOne(mappedBy = "mapa")
-    private Designacao designacao;
+    @OneToMany(mappedBy = "mapa")
+    private List<Designacao> designacao;
 }

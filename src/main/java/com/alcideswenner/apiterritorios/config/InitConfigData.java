@@ -61,7 +61,7 @@ public class InitConfigData {
                         null);
                 mapas[8] = new Mapa(0L, "https://territorio-api.herokuapp.com/mapas/map9.png", "Sarney", 9, false,
                         null);
-                mapas[9] = new Mapa(0L, "https://territorio-api.herokuapp.com/mapas/ma10.png", "Sarney", 10, false,
+                mapas[9] = new Mapa(0L, "https://territorio-api.herokuapp.com/mapas/map10.png", "Sarney", 10, false,
                         null);
                 mapas[10] = new Mapa(0L, "https://territorio-api.herokuapp.com/mapas/map11.png", "Subestação", 11,
                         false,

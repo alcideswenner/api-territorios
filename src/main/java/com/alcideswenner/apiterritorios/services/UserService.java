@@ -2,8 +2,8 @@ package com.alcideswenner.apiterritorios.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.alcideswenner.apiterritorios.dto.UserDTO;
 import com.alcideswenner.apiterritorios.entities.User;
 import com.alcideswenner.apiterritorios.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -42,5 +41,13 @@ public class UserService implements UserDetailsService {
         });
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                 permissoes);
+    }
+
+    public Optional<List<UserDTO>> findAll() {
+        return Optional.of(userRepository.findAll().stream().map(user -> new UserDTO(user)).toList());
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }
