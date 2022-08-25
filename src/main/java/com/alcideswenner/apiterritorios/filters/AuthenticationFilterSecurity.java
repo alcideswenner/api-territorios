@@ -79,12 +79,12 @@ public class AuthenticationFilterSecurity extends UsernamePasswordAuthentication
                         user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-        Map<String, String> tokenMap = new HashMap<>();
+        Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
         tokenMap.put("validFrom", Date.from(now).toString());
         tokenMap.put("validUntil", Date.from(now.plus(5, ChronoUnit.HOURS)).toString());
         tokenMap.put("teste", Date.from(now.plus(5, ChronoUnit.HOURS)).getTime() + "");
-        tokenMap.put("idUser", userRepository.findByUsername(user.getUsername()).getId() + "");
+        tokenMap.put("idUser", userRepository.findByUsername(user.getUsername()).getId());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.writeValue(response.getOutputStream(), tokenMap);
