@@ -20,6 +20,8 @@ public class MapaDTO {
 
     private String msgDataCarencia;
 
+    private Long userAtual;
+
     public MapaDTO(Mapa mapa) {
         this.id = mapa.getId();
         this.urlMapa = mapa.getUrlMapa();
@@ -27,5 +29,6 @@ public class MapaDTO {
         this.numeroTerritorio = mapa.getNumeroTerritorio();
         this.status = mapa.getStatus();
         this.msgDataCarencia = mapa.getMsgDataCarencia();
+        this.userAtual = mapa.getUserAtual();
     }
 }

@@ -27,6 +27,9 @@ public class Mapa {
     @Transient
     private String msgDataCarencia;
 
+    @Transient
+    private Long userAtual;
+
     @OneToMany(mappedBy = "mapa")
     private List<Designacao> designacao;
 
