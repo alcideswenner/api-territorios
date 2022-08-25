@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.alcideswenner.apiterritorios.filters.AuthenticationFilterSecurity;
 import com.alcideswenner.apiterritorios.filters.AuthorizationFilterSecurity;
+import com.alcideswenner.apiterritorios.repositories.UserRepository;
 import com.alcideswenner.apiterritorios.services.UserService;
 
 @Configuration
@@ -30,6 +31,9 @@ public class ConfigSecurity {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
@@ -38,7 +42,7 @@ public class ConfigSecurity {
         http.authorizeHttpRequests()
                 .antMatchers("/login", "/h2-console/**","/mapas/**")
                 .permitAll();
-        http.addFilter(new AuthenticationFilterSecurity(authManager(http)));
+        http.addFilter(new AuthenticationFilterSecurity(authManager(http), userRepository));
         http.addFilterBefore(new AuthorizationFilterSecurity(), UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests().anyRequest().authenticated();
         http.authenticationManager(authManager(http));
