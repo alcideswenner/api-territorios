@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
 import com.alcideswenner.apiterritorios.entities.Designacao;
@@ -27,9 +28,9 @@ public class DesignacaoController {
     private DesignacaoService designacaoService;
 
     @GetMapping(value = "/find-mapas")
-    public ResponseEntity<?> listaMapas() {
-        return mapaService.listaMapas().isPresent()
-                ? ResponseEntity.ok().body(mapaService.listaMapas().get())
+    public ResponseEntity<?> listaMapas(@RequestParam(value = "userAtual", required = false) Long idUser) {
+        return mapaService.listaMapas(idUser).isPresent()
+                ? ResponseEntity.ok().body(mapaService.listaMapas(idUser).get())
                 : ResponseEntity.notFound().build();
     }
 
