@@ -30,6 +30,9 @@ public class Mapa {
     @Transient
     private Long userAtual;
 
+    @Transient
+    private Long designacaoId;
+
     @OneToMany(mappedBy = "mapa")
     private List<Designacao> designacao;
 

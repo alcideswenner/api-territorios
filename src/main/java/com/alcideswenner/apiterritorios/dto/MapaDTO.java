@@ -22,6 +22,8 @@ public class MapaDTO {
 
     private Long userAtual;
 
+    private Long designacaoId;
+
     public MapaDTO(Mapa mapa) {
         this.id = mapa.getId();
         this.urlMapa = mapa.getUrlMapa();
@@ -30,5 +32,6 @@ public class MapaDTO {
         this.status = mapa.getStatus();
         this.msgDataCarencia = mapa.getMsgDataCarencia();
         this.userAtual = mapa.getUserAtual();
+        this.designacaoId = mapa.getDesignacaoId();
     }
 }

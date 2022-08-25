@@ -19,9 +19,11 @@ public class MapaService {
         List<MapaDTO> lista = mapaRepository.findAll().stream().map(e -> new MapaDTO(e)).toList();
         lista = lista.stream().map(e -> {
             Optional<Long> findIdUser = findIdUserByMapaId(e.getId());
+            Optional<Long> findIdDesignacao = findIdDesignacaoByMapaId(e.getId());
             Optional<String> findDataCarencia = findDataCarenciaOfMapaById(e.getId());
             e.setMsgDataCarencia(findDataCarencia.orElseGet(String::new));
             e.setUserAtual(findIdUser.orElseGet(() -> 0L));
+            e.setDesignacaoId(findIdDesignacao.orElseGet(() -> 0L));
             return e;
         }).toList();
         return Optional.of(lista);
@@ -58,6 +60,15 @@ public class MapaService {
             return Optional.empty();
         }
         return Optional.of(optIdUser.get());
+    }
+
+    public Optional<Long> findIdDesignacaoByMapaId(Long id) {
+        Optional<Long> optIdDesignacao = mapaRepository.findIdDesignacaoByMapaId(id);
+
+        if (!optIdDesignacao.isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(optIdDesignacao.get());
     }
 
 }
