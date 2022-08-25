@@ -4,12 +4,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
 import com.alcideswenner.apiterritorios.entities.Designacao;
+import com.alcideswenner.apiterritorios.exceptions.DesignacaoNotFoundException;
 import com.alcideswenner.apiterritorios.services.DesignacaoService;
 import com.alcideswenner.apiterritorios.services.MapaService;
 
@@ -49,6 +52,26 @@ public class DesignacaoController {
         return designacaoService.findAll().isPresent()
                 ? ResponseEntity.ok().body(designacaoService.findAll().get())
                 : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> concluirDesignacao(@PathVariable("id") Long id) {
+        Optional<Boolean> optDesignacao = Optional.empty();
+
+        try {
+            optDesignacao = designacaoService.concluirDesignacao(id);
+        } catch (DesignacaoNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        return optDesignacao.get().booleanValue()
+                ? ResponseEntity.ok("Designação Concluída")
+                : ResponseEntity.badRequest().body("Designação já concluída");
+    }
+
+    @GetMapping(value = "/find-datacarencia-mapa/{id}")
+    public ResponseEntity<?> findDataCarenciaMapa(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(mapaService.findDataCarenciaOfMapaById(id).get());
     }
 
 }

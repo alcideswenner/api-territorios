@@ -1,13 +1,12 @@
 package com.alcideswenner.apiterritorios.entities;
 
 import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,11 +31,11 @@ public class Designacao {
 
     private LocalDateTime dataConclusao;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "designacao_user")
     private User user;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "designacao_mapa")
     private Mapa mapa;
 

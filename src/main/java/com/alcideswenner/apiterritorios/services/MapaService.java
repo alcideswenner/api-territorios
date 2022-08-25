@@ -1,5 +1,7 @@
 package com.alcideswenner.apiterritorios.services;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,4 +27,19 @@ public class MapaService {
                 .findFirst()
                 .orElseGet(null));
     }
+
+    public Optional<String> findDataCarenciaOfMapaById(Long id) {
+        Optional<LocalDateTime> optMapaDataCarencia = mapaRepository.findDataCarenciaOfMapaById(id);
+        LocalDateTime dataAgora = LocalDateTime.now();
+        if (!optMapaDataCarencia.isPresent()) {
+            return Optional.of("");
+        }
+        if (optMapaDataCarencia.get().isAfter(dataAgora)) {
+            long diferencaDias = ChronoUnit.DAYS.between(dataAgora, optMapaDataCarencia.get());
+            return Optional.of("(Território usado recentemente) - Aguarde " + diferencaDias+" dias para trabalhar com esse território novamente");
+        } else {
+            return Optional.of("");
+        }
+    }
+
 }
