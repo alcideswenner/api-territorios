@@ -74,4 +74,9 @@ public class DesignacaoController {
         return ResponseEntity.ok().body(mapaService.findDataCarenciaOfMapaById(id).get());
     }
 
+    @GetMapping(value = "/find-mapas-por-iduser/{id}")
+    public ResponseEntity<?> listaMapasByUserId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(mapaService.listaMapasByUserId(id).get());
+    }
+
 }
