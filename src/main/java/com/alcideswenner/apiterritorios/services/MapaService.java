@@ -16,7 +16,13 @@ public class MapaService {
     private MapaRepository mapaRepository;
 
     public Optional<List<MapaDTO>> listaMapas() {
-        return Optional.of(mapaRepository.findAll().stream().map(e -> new MapaDTO(e)).toList());
+        List<MapaDTO> lista = mapaRepository.findAll().stream().map(e -> new MapaDTO(e)).toList();
+        lista = lista.stream().map(e -> {
+            Optional<String> findDataCarencia = findDataCarenciaOfMapaById(e.getId());
+            e.setMsgDataCarencia(findDataCarencia.orElseGet(String::new));
+            return e;
+        }).toList();
+        return Optional.of(lista);
     }
 
     public Optional<MapaDTO> findMapaByID(Long id) {
@@ -36,7 +42,8 @@ public class MapaService {
         }
         if (optMapaDataCarencia.get().isAfter(dataAgora)) {
             long diferencaDias = ChronoUnit.DAYS.between(dataAgora, optMapaDataCarencia.get());
-            return Optional.of("(Território usado recentemente) - Aguarde " + diferencaDias+" dias para trabalhar com esse território novamente");
+            return Optional.of("(Território usado recentemente) - Aguarde " + diferencaDias
+                    + " dias para trabalhar com esse território novamente");
         } else {
             return Optional.of("");
         }

@@ -24,6 +24,19 @@ public class Mapa {
 
     private Boolean status;
 
+    @Transient
+    private String msgDataCarencia;
+
     @OneToMany(mappedBy = "mapa")
     private List<Designacao> designacao;
+
+    public Mapa(Long id, String urlMapa, String nome, Integer numeroTerritorio, Boolean status,
+            List<Designacao> designacao) {
+        this.id = id;
+        this.urlMapa = urlMapa;
+        this.nome = nome;
+        this.numeroTerritorio = numeroTerritorio;
+        this.status = status;
+        this.designacao = designacao;
+    }
 }

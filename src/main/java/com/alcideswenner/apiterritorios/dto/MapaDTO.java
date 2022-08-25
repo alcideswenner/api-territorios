@@ -18,11 +18,14 @@ public class MapaDTO {
 
     private Boolean status;
 
+    private String msgDataCarencia;
+
     public MapaDTO(Mapa mapa) {
         this.id = mapa.getId();
         this.urlMapa = mapa.getUrlMapa();
         this.nome = mapa.getNome();
         this.numeroTerritorio = mapa.getNumeroTerritorio();
         this.status = mapa.getStatus();
+        this.msgDataCarencia = mapa.getMsgDataCarencia();
     }
 }
