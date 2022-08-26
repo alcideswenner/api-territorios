@@ -23,6 +23,8 @@ public class MapaDTO {
     private Long userAtual;
 
     private Long designacaoId;
+    
+    private String urlGoogleMaps;
 
     public MapaDTO(Mapa mapa) {
         this.id = mapa.getId();
@@ -33,5 +35,6 @@ public class MapaDTO {
         this.msgDataCarencia = mapa.getMsgDataCarencia();
         this.userAtual = mapa.getUserAtual();
         this.designacaoId = mapa.getDesignacaoId();
+        this.urlGoogleMaps = mapa.getUrlGoogleMaps();
     }
 }

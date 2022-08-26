@@ -24,6 +24,8 @@ public class Mapa {
 
     private Boolean status;
 
+    private String urlGoogleMaps;
+
     @Transient
     private String msgDataCarencia;
 
@@ -37,12 +39,13 @@ public class Mapa {
     private List<Designacao> designacao;
 
     public Mapa(Long id, String urlMapa, String nome, Integer numeroTerritorio, Boolean status,
-            List<Designacao> designacao) {
+            List<Designacao> designacao, String urlGoogleMaps) {
         this.id = id;
         this.urlMapa = urlMapa;
         this.nome = nome;
         this.numeroTerritorio = numeroTerritorio;
         this.status = status;
         this.designacao = designacao;
+        this.urlGoogleMaps = urlGoogleMaps;
     }
 }
