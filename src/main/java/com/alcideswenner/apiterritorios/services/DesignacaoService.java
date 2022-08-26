@@ -21,6 +21,9 @@ public class DesignacaoService {
     @Autowired
     private DesignacaoRepository designacaoRepository;
 
+    @Autowired
+    private NotificationPushService notificationPushService;
+
     public Optional<Designacao> saveDesignacao(Designacao designacao) {
 
         mapaRepository.findById(designacao.getMapa().getId()).map(e -> {
@@ -47,6 +50,16 @@ public class DesignacaoService {
         designacao.setDataConclusao(LocalDateTime.now());
         designacao.setDataCarencia(LocalDateTime.now().plusDays(8));
         designacao.getMapa().setStatus(false);
+
+        try {
+            notificationPushService.requestSendPush(
+                    "Território nº " + designacao.getMapa().getNumeroTerritorio() +
+                            "\n Bairro: " +
+                            designacao.getMapa().getNome(),
+                    "Nova Designação Concluída");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return Optional.of(Boolean.TRUE);
     }
 }
