@@ -40,7 +40,7 @@ public class ConfigSecurity {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests()
-                .antMatchers("/login", "/h2-console/**","/mapas/**")
+                .antMatchers("/login", "/h2-console/**","/mapas/**","/politica-privacidade/**")
                 .permitAll();
         http.addFilter(new AuthenticationFilterSecurity(authManager(http), userRepository));
         http.addFilterBefore(new AuthorizationFilterSecurity(), UsernamePasswordAuthenticationFilter.class);
