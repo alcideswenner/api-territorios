@@ -15,7 +15,7 @@ public class MapaService {
     @Autowired
     private MapaRepository mapaRepository;
 
-    public Optional<List<MapaDTO>> listaMapas(Long idUser) {
+    public Optional<List<MapaDTO>> listaMapas(Long idUser, String nome) {
         List<MapaDTO> lista = mapaRepository.findAll().stream().map(e -> new MapaDTO(e)).toList();
         lista = lista.stream().map(e -> {
             Optional<Long> findIdUser = findIdUserByMapaId(e.getId());
@@ -26,8 +26,13 @@ public class MapaService {
             e.setDesignacaoId(findIdDesignacao.orElseGet(() -> 0L));
             return e;
         }).toList();
+
         if (idUser != null) {
             lista = lista.stream().filter(e -> e.getUserAtual().equals(idUser) && e.getStatus() == true).toList();
+        }
+
+        if (nome != null) {
+            lista = lista.stream().filter(e -> e.getNome().equals(nome)).toList();
         }
         return Optional.of(lista);
     }

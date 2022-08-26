@@ -1,5 +1,6 @@
 package com.alcideswenner.apiterritorios.controllers;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +29,12 @@ public class DesignacaoController {
     private DesignacaoService designacaoService;
 
     @GetMapping(value = "/find-mapas")
-    public ResponseEntity<?> listaMapas(@RequestParam(value = "userAtual", required = false) Long idUser) {
-        return mapaService.listaMapas(idUser).isPresent()
-                ? ResponseEntity.ok().body(mapaService.listaMapas(idUser).get())
+    public ResponseEntity<?> listaMapas(
+            @RequestParam(value = "userAtual", required = false) Long idUser,
+            @RequestParam(value = "bairro", required = false) String nome) {
+        Optional<List<MapaDTO>> listaOpt = mapaService.listaMapas(idUser, nome);
+        return listaOpt.isPresent()
+                ? ResponseEntity.ok().body(listaOpt.get())
                 : ResponseEntity.notFound().build();
     }
 
