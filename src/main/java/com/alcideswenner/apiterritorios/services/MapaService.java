@@ -4,9 +4,14 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
+import com.alcideswenner.apiterritorios.dto.RankingDTO;
 import com.alcideswenner.apiterritorios.repositories.MapaRepository;
 
 @Service
@@ -94,4 +99,13 @@ public class MapaService {
         return Optional.of(lista);
     }
 
+    public Optional<List<RankingDTO>> rankingBairros() {
+        try {
+            Optional<List<RankingDTO>> lista = Optional.ofNullable(mapaRepository
+                    .rankingBairros().stream().limit(5).toList());
+            return lista;
+        } catch (NoResultException | NonUniqueResultException e) {
+            return Optional.empty();
+        }
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
+import com.alcideswenner.apiterritorios.dto.RankingDTO;
 import com.alcideswenner.apiterritorios.entities.Designacao;
 import com.alcideswenner.apiterritorios.exceptions.DesignacaoNotFoundException;
 import com.alcideswenner.apiterritorios.services.DesignacaoService;
@@ -82,6 +83,15 @@ public class DesignacaoController {
     @GetMapping(value = "/find-mapas-por-iduser/{id}")
     public ResponseEntity<?> listaMapasByUserId(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(mapaService.listaMapasByUserId(id).get());
+    }
+
+    @GetMapping(value = "/ranking-bairro-mais-trabalhados")
+    public ResponseEntity<?> retornaRankingBairroMaisTrabalhadoPorAnoCorrente() {
+        Optional<List<RankingDTO>> lista = mapaService
+                .rankingBairros();
+        return lista.isPresent() 
+        ? ResponseEntity.ok(lista.get()) 
+        : ResponseEntity.notFound().build();
     }
 
 }
