@@ -25,7 +25,6 @@ public class DesignacaoService {
     private NotificationPushService notificationPushService;
 
     public Optional<Designacao> saveDesignacao(Designacao designacao) {
-
         mapaRepository.findById(designacao.getMapa().getId()).map(e -> {
             e.setStatus(true);
             return e;

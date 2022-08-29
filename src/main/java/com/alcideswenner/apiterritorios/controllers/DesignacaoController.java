@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
 import com.alcideswenner.apiterritorios.dto.RankingDTO;
+import com.alcideswenner.apiterritorios.dto.TesteDTO;
 import com.alcideswenner.apiterritorios.entities.Designacao;
 import com.alcideswenner.apiterritorios.exceptions.DesignacaoNotFoundException;
 import com.alcideswenner.apiterritorios.services.DesignacaoService;
@@ -34,6 +35,7 @@ public class DesignacaoController {
             @RequestParam(value = "userAtual", required = false) Long idUser,
             @RequestParam(value = "bairro", required = false) String nome) {
         Optional<List<MapaDTO>> listaOpt = mapaService.listaMapas(idUser, nome);
+        //System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
         return listaOpt.isPresent()
                 ? ResponseEntity.ok().body(listaOpt.get())
                 : ResponseEntity.notFound().build();
@@ -89,9 +91,18 @@ public class DesignacaoController {
     public ResponseEntity<?> retornaRankingBairroMaisTrabalhadoPorAnoCorrente() {
         Optional<List<RankingDTO>> lista = mapaService
                 .rankingBairros();
-        return lista.isPresent() 
-        ? ResponseEntity.ok(lista.get()) 
-        : ResponseEntity.notFound().build();
+        return lista.isPresent()
+                ? ResponseEntity.ok(lista.get())
+                : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(value = "/teste")
+    public ResponseEntity<?> teste() {
+        Optional<List<TesteDTO>> lista = mapaService
+                .teste();
+        return lista.isPresent()
+                ? ResponseEntity.ok(lista.get())
+                : ResponseEntity.notFound().build();
     }
 
 }

@@ -4,14 +4,13 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
 import com.alcideswenner.apiterritorios.dto.RankingDTO;
+import com.alcideswenner.apiterritorios.dto.TesteDTO;
 import com.alcideswenner.apiterritorios.repositories.MapaRepository;
 
 @Service
@@ -107,5 +106,23 @@ public class MapaService {
         } catch (NoResultException | NonUniqueResultException e) {
             return Optional.empty();
         }
+    }
+
+    public Optional<List<TesteDTO>> teste() {
+        try {
+
+            Optional<List<TesteDTO>> opt = Optional.ofNullable(mapaRepository
+                    .findTest()
+                    .stream()
+                    .map(t -> new TesteDTO(t.get("nome", String.class)))
+                    .toList());
+            return opt;
+        } catch (NoResultException | NonUniqueResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    public void teste2(){
+        mapaRepository.teste4(1, true);
     }
 }

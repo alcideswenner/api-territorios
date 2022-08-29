@@ -3,9 +3,12 @@ package com.alcideswenner.apiterritorios.repositories;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import com.alcideswenner.apiterritorios.dto.RankingDTO;
+import com.alcideswenner.apiterritorios.dto.RetornaMapasNaoConcluidosDTO;
 import com.alcideswenner.apiterritorios.entities.Mapa;
 
 public interface MapaRepository extends JpaRepository<Mapa, Long> {
@@ -57,11 +60,22 @@ public interface MapaRepository extends JpaRepository<Mapa, Long> {
     Optional<Long> findIdDesignacaoByMapaId(Long idMapa);
 
     @Query(value = """
-        SELECT new com.alcideswenner.apiterritorios.dto.RankingDTO(m.nome, COUNT(m.nome)) FROM Designacao d
-        JOIN d.mapa m
-		WHERE to_char(d.dataDesignacao, 'yyyy') = to_char(CURRENT_DATE, 'yyyy')
-        GROUP BY m.nome
-        ORDER BY COUNT(m.nome) DESC
-            """)
+                  SELECT new com.alcideswenner.apiterritorios.dto.RankingDTO(m.nome, COUNT(m.nome)) FROM Designacao d
+                  JOIN d.mapa m
+            WHERE to_char(d.dataDesignacao, 'yyyy') = to_char(CURRENT_DATE, 'yyyy')
+                  GROUP BY m.nome
+                  ORDER BY COUNT(m.nome) DESC
+                      """)
     public List<RankingDTO> rankingBairros();
+
+    @Query(name = "find_mapas_nao_concluidos_dto", nativeQuery = true)
+    public List<RetornaMapasNaoConcluidosDTO> findMapasNaoConcluidos();
+
+    @Query(value = "SELECT nome as nome from tb_mapa", nativeQuery = true)
+    List<Tuple> findTest();
+
+    @org.springframework.transaction.annotation.Transactional
+    @Modifying
+    @Query(value = "CALL public.teste4(?1, ?2)", nativeQuery = true)
+    void teste4(Integer numTerritorio, boolean statusUp);
 }
