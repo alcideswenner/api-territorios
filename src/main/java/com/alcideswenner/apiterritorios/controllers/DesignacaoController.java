@@ -96,13 +96,13 @@ public class DesignacaoController {
                 : ResponseEntity.notFound().build();
     }
 
-    @GetMapping(value = "/teste")
+/*     @GetMapping(value = "/teste")
     public ResponseEntity<?> teste() {
         Optional<List<TesteDTO>> lista = mapaService
                 .teste();
         return lista.isPresent()
                 ? ResponseEntity.ok(lista.get())
                 : ResponseEntity.notFound().build();
-    }
+    } */
 
 }

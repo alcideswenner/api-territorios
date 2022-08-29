@@ -68,7 +68,7 @@ public interface MapaRepository extends JpaRepository<Mapa, Long> {
                       """)
     public List<RankingDTO> rankingBairros();
 
-    @Query(name = "find_mapas_nao_concluidos_dto", nativeQuery = true)
+/*     @Query(name = "find_mapas_nao_concluidos_dto", nativeQuery = true)
     public List<RetornaMapasNaoConcluidosDTO> findMapasNaoConcluidos();
 
     @Query(value = "SELECT nome as nome from tb_mapa", nativeQuery = true)
@@ -77,5 +77,5 @@ public interface MapaRepository extends JpaRepository<Mapa, Long> {
     @org.springframework.transaction.annotation.Transactional
     @Modifying
     @Query(value = "CALL public.teste4(?1, ?2)", nativeQuery = true)
-    void teste4(Integer numTerritorio, boolean statusUp);
+    void teste4(Integer numTerritorio, boolean statusUp); */
 }
