@@ -3,12 +3,10 @@ package com.alcideswenner.apiterritorios.repositories;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import com.alcideswenner.apiterritorios.dto.MapaDTO;
 import com.alcideswenner.apiterritorios.dto.RankingDTO;
-import com.alcideswenner.apiterritorios.dto.RetornaMapasNaoConcluidosDTO;
 import com.alcideswenner.apiterritorios.entities.Mapa;
 
 public interface MapaRepository extends JpaRepository<Mapa, Long> {
@@ -67,6 +65,9 @@ public interface MapaRepository extends JpaRepository<Mapa, Long> {
                   ORDER BY COUNT(m.nome) DESC
                       """)
     public List<RankingDTO> rankingBairros();
+
+    @Query(name = "find_all_mapas", nativeQuery = true)
+    public List<MapaDTO> listaMapasWithLeftJoinMapaAndDesignacao();
 
 /*     @Query(name = "find_mapas_nao_concluidos_dto", nativeQuery = true)
     public List<RetornaMapasNaoConcluidosDTO> findMapasNaoConcluidos();

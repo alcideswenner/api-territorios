@@ -1,5 +1,6 @@
 package com.alcideswenner.apiterritorios.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
 import lombok.*;
@@ -27,7 +28,7 @@ public class Mapa {
     private String urlGoogleMaps;
 
     @Transient
-    private String msgDataCarencia;
+    private LocalDateTime dataCarencia;
 
     @Transient
     private Long userAtual;

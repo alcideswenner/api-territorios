@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
 import com.alcideswenner.apiterritorios.dto.RankingDTO;
-import com.alcideswenner.apiterritorios.dto.TesteDTO;
 import com.alcideswenner.apiterritorios.repositories.MapaRepository;
 
 @Service
@@ -20,24 +19,21 @@ public class MapaService {
     private MapaRepository mapaRepository;
 
     public Optional<List<MapaDTO>> listaMapas(Long idUser, String nome) {
-        List<MapaDTO> lista = mapaRepository.findAll().stream().map(e -> new MapaDTO(e)).toList();
-        lista = lista.stream().map(e -> {
-            Optional<Long> findIdUser = findIdUserByMapaId(e.getId());
-            Optional<Long> findIdDesignacao = findIdDesignacaoByMapaId(e.getId());
-            Optional<String> findDataCarencia = findDataCarenciaOfMapaById(e.getId());
-            e.setMsgDataCarencia(findDataCarencia.orElseGet(String::new));
-            e.setUserAtual(findIdUser.orElseGet(() -> 0L));
-            e.setDesignacaoId(findIdDesignacao.orElseGet(() -> 0L));
-            return e;
-        }).toList();
-
+        List<MapaDTO> lista = mapaRepository.listaMapasWithLeftJoinMapaAndDesignacao();
         if (idUser != null) {
-            lista = lista.stream().filter(e -> e.getUserAtual().equals(idUser) && e.getStatus() == true).toList();
+            lista = lista.stream().filter(e -> e.getUserAtual().equals(idUser) &&
+                    e.getStatus() == true).toList();
         }
-
         if (nome != null) {
             lista = lista.stream().filter(e -> e.getNome().equals(nome)).toList();
         }
+
+        lista = lista.stream().map(e -> {
+            Optional<String> findDataCarencia = findDataCarenciaOfMapaById(e.getDataCarencia());
+            e.setMsgDataCarencia(findDataCarencia.orElseGet(String::new));
+            return e;
+        }).toList();
+
         return Optional.of(lista);
     }
 
@@ -50,14 +46,14 @@ public class MapaService {
                 .orElseGet(null));
     }
 
-    public Optional<String> findDataCarenciaOfMapaById(Long id) {
-        Optional<LocalDateTime> optMapaDataCarencia = mapaRepository.findDataCarenciaOfMapaById(id);
+    public Optional<String> findDataCarenciaOfMapaById(LocalDateTime dataCarencia) {
         LocalDateTime dataAgora = LocalDateTime.now();
-        if (!optMapaDataCarencia.isPresent()) {
+        Optional<LocalDateTime> optDataCarencia = Optional.ofNullable(dataCarencia);
+        if (!optDataCarencia.isPresent()) {
             return Optional.of("");
         }
-        if (optMapaDataCarencia.get().isAfter(dataAgora)) {
-            long diferencaDias = ChronoUnit.DAYS.between(dataAgora, optMapaDataCarencia.get());
+        if (optDataCarencia.get().isAfter(dataAgora)) {
+            long diferencaDias = ChronoUnit.DAYS.between(dataAgora, optDataCarencia.get());
             return Optional.of("(Território usado recentemente) - Aguarde " + diferencaDias
                     + " dias para trabalhar com esse território novamente");
         } else {
@@ -83,21 +79,6 @@ public class MapaService {
         return Optional.of(optIdDesignacao.get());
     }
 
-    public Optional<List<MapaDTO>> listaMapasByUserId(Long idUser) {
-        List<MapaDTO> lista = mapaRepository.findAll().stream().map(e -> new MapaDTO(e)).toList();
-        lista = lista.stream().map(e -> {
-            Optional<Long> findIdUser = findIdUserByMapaId(e.getId());
-            Optional<Long> findIdDesignacao = findIdDesignacaoByMapaId(e.getId());
-            Optional<String> findDataCarencia = findDataCarenciaOfMapaById(e.getId());
-            e.setMsgDataCarencia(findDataCarencia.orElseGet(String::new));
-            e.setUserAtual(findIdUser.orElseGet(() -> 0L));
-            e.setDesignacaoId(findIdDesignacao.orElseGet(() -> 0L));
-            return e;
-        }).toList();
-        lista = lista.stream().filter(e -> e.getUserAtual().equals(idUser) && e.getStatus() == true).toList();
-        return Optional.of(lista);
-    }
-
     public Optional<List<RankingDTO>> rankingBairros() {
         try {
             Optional<List<RankingDTO>> lista = Optional.ofNullable(mapaRepository
@@ -107,22 +88,4 @@ public class MapaService {
             return Optional.empty();
         }
     }
-/* 
-    public Optional<List<TesteDTO>> teste() {
-        try {
-
-            Optional<List<TesteDTO>> opt = Optional.ofNullable(mapaRepository
-                    .findTest()
-                    .stream()
-                    .map(t -> new TesteDTO(t.get("nome", String.class)))
-                    .toList());
-            return opt;
-        } catch (NoResultException | NonUniqueResultException e) {
-            return Optional.empty();
-        }
-    }
-
-    public void teste2(){
-        mapaRepository.teste4(1, true);
-    } */
 }
