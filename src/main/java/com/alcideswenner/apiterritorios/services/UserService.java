@@ -11,8 +11,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alcideswenner.apiterritorios.dto.UserDTO;
 import com.alcideswenner.apiterritorios.entities.User;
+import com.alcideswenner.apiterritorios.repositories.MapaRepository;
 import com.alcideswenner.apiterritorios.repositories.UserRepository;
 
 @Service
@@ -24,12 +27,15 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private MapaRepository mapaRepository;
+
     public Optional<User> saveUser(User user) {
         if (userRepository.findByUsername(user.getUsername()) == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return Optional.of(userRepository.save(user));
         }
-    return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
@@ -50,7 +56,21 @@ public class UserService implements UserDetailsService {
         return Optional.of(userRepository.findAll().stream().map(user -> new UserDTO(user)).toList());
     }
 
+    @Transactional
     public void deleteUser(Long id) {
+        long[] idsMapa = mapaRepository.listaMapasWithLeftJoinMapaAndDesignacao()
+                .stream()
+                .filter(e -> e.getUserAtual()
+                        .equals(id))
+                .mapToLong(e -> e.getId()).toArray();
+        if (idsMapa != null) {
+            for (long l : idsMapa) {
+                mapaRepository.findById(l).map(e -> {
+                    e.setStatus(false);
+                    return e;
+                });
+            }
+        }
         userRepository.deleteById(id);
     }
 }
