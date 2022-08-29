@@ -25,8 +25,11 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     public Optional<User> saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return Optional.of(userRepository.save(user));
+        if (userRepository.findByUsername(user.getUsername()) == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return Optional.of(userRepository.save(user));
+        }
+    return Optional.empty();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.alcideswenner.apiterritorios.controllers;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,14 +25,17 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('SYSTEM')")
     @PostMapping
     public ResponseEntity<?> saveUser(@RequestBody User user) {
-        return ResponseEntity.ok().body(new UserDTO(userService.saveUser(user).get()));
+        Optional<User> opt = userService.saveUser(user);
+        return opt.isPresent()
+                ? ResponseEntity.ok().body(new UserDTO(opt.get()))
+                : ResponseEntity.badRequest().build();
     }
 
     @PreAuthorize("hasAnyAuthority('SYSTEM','ADMIN')")
     @GetMapping
     public ResponseEntity<?> findAll() {
         return userService.findAll().isPresent()
-                       ? ResponseEntity.ok().body(userService.findAll().get())
+                ? ResponseEntity.ok().body(userService.findAll().get())
                 : ResponseEntity.notFound().build();
     }
 
