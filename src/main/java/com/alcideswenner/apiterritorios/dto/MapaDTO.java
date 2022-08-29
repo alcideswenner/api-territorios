@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MapaDTO {
-    
+
     private Long id;
 
     private String urlMapa;
@@ -26,7 +26,7 @@ public class MapaDTO {
     private Long userAtual;
 
     private Long designacaoId;
-    
+
     private String urlGoogleMaps;
 
     private String msgDataCarencia;
@@ -54,5 +54,12 @@ public class MapaDTO {
         this.userAtual = mapa.getUserAtual();
         this.designacaoId = mapa.getDesignacaoId();
         this.urlGoogleMaps = mapa.getUrlGoogleMaps();
+    }
+
+    public Long getUserAtual() {
+        if (this.userAtual != null) {
+            return this.userAtual;
+        }
+        return 0L;
     }
 }
