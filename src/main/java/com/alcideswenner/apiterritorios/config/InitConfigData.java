@@ -2,6 +2,7 @@ package com.alcideswenner.apiterritorios.config;
 
 import java.util.Arrays;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,21 +20,27 @@ import lombok.RequiredArgsConstructor;
 public class InitConfigData {
 
     private final PasswordEncoder passwordEncoder;
+    
+    @Value("${app.username.system}")
+    private String usernameSystem;
+
+    @Value("${app.password.system}")
+    private String passwordSystem;
 
     @Bean
     public CommandLineRunner init(UserRepository userRepository, PermissaoRepository permissaoRepository,
             MapaRepository mapaRepository) {
         return (args) -> {
 
-            if (userRepository.findByUsername("admin") == null) {
+            if (userRepository.findByUsername(usernameSystem) == null) {
                 Permissao permissao = new Permissao();
                 permissao.setDescricao("ACESSO GLOBAL");
                 permissao.setNomePermissao("SYSTEM");
 
                 User user = new User();
                 user.setName("Wenner");
-                user.setUsername("admin");
-                user.setPassword(passwordEncoder.encode("admin"));
+                user.setUsername(usernameSystem);
+                user.setPassword(passwordEncoder.encode(passwordSystem));
 
                 permissao.setUser(user);
                 user.setPermissao(Arrays.asList(permissao));

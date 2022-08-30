@@ -42,7 +42,6 @@ public class DesignacaoController {
     @PostMapping
     public ResponseEntity<?> saveDesignacao(@RequestBody Designacao designacao) {
         Optional<MapaDTO> mapaOpt = mapaService.findMapaByID(designacao.getMapa().getId());
-
         if (mapaOpt.isPresent() && mapaOpt.get().getStatus() == true) {
             return ResponseEntity.badRequest().body("Mapa não disponível!");
         } else if (!mapaOpt.isPresent()) {

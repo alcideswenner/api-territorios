@@ -21,10 +21,17 @@ public class DesignacaoService {
     @Autowired
     private DesignacaoRepository designacaoRepository;
 
+    private final UserService userService;
+
+    public DesignacaoService(UserService userService) {
+        this.userService = userService;
+    }
+
     @Autowired
     private NotificationPushService notificationPushService;
 
     public Optional<Designacao> saveDesignacao(Designacao designacao) {
+        userService.isUserReal(designacao.getUser().getId());
         mapaRepository.findById(designacao.getMapa().getId()).map(e -> {
             e.setStatus(true);
             return e;
@@ -41,7 +48,8 @@ public class DesignacaoService {
     public Optional<Boolean> concluirDesignacao(Long id) {
         Designacao designacao = designacaoRepository.findById(id)
                 .orElseThrow(() -> new DesignacaoNotFoundException("Designação não encontrada"));
-
+        userService.isUserReal(designacao.getUser().getId());
+        
         if (designacao.getDataConclusao() != null) {
             return Optional.of(Boolean.FALSE);
         }

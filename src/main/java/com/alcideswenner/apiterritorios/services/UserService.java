@@ -6,15 +6,16 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.alcideswenner.apiterritorios.dto.UserDTO;
 import com.alcideswenner.apiterritorios.entities.User;
+import com.alcideswenner.apiterritorios.exceptions.UserAuthenticationIsRealException;
 import com.alcideswenner.apiterritorios.repositories.MapaRepository;
 import com.alcideswenner.apiterritorios.repositories.UserRepository;
 
@@ -72,5 +73,24 @@ public class UserService implements UserDetailsService {
             }
         }
         userRepository.deleteById(id);
+    }
+
+    public void isUserReal(Long idUser) {
+        Optional<User> optUser = userRepository.findById(idUser);
+        String usernameAuth = SecurityContextHolder.getContext().getAuthentication().getName();
+        Boolean isRoleNotSystem = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .filter(e -> e.getAuthority().equals("SYSTEM")).count() == 0;
+
+        if (!optUser.isPresent()) {
+            throw new UserAuthenticationIsRealException("Usuário não existe!");
+        }
+
+        if ((!usernameAuth.equals(optUser.get().getUsername())) && isRoleNotSystem) {
+            throw new UserAuthenticationIsRealException("Alerta! Ataque de Hacker.");
+        }
     }
 }
