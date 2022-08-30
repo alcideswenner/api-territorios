@@ -34,9 +34,12 @@ public class AuthenticationFilterSecurity extends UsernamePasswordAuthentication
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final UserRepository userRepository;
 
-    public AuthenticationFilterSecurity(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    private final String secretyKey;
+
+    public AuthenticationFilterSecurity(AuthenticationManager authenticationManager, UserRepository userRepository, String secretyKey) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.secretyKey = secretyKey;
     }
 
     @Override
@@ -68,7 +71,7 @@ public class AuthenticationFilterSecurity extends UsernamePasswordAuthentication
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
             Authentication authentication) throws IOException, ServletException {
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("123454dkdkdkdkdd".getBytes());
+        Algorithm algorithm = Algorithm.HMAC256(secretyKey.getBytes());
         Instant now = Instant.now();
 
         String token = JWT.create()

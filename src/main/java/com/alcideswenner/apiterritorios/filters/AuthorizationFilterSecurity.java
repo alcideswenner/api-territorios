@@ -24,6 +24,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 public class AuthorizationFilterSecurity extends OncePerRequestFilter {
+    private final String secretyKey;
+
+    public AuthorizationFilterSecurity(String secretyKey) {
+        this.secretyKey = secretyKey;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -35,7 +40,7 @@ public class AuthorizationFilterSecurity extends OncePerRequestFilter {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 try {
                     String token = authorizationHeader.substring("Bearer ".length());
-                    Algorithm algorithm = Algorithm.HMAC256("123454dkdkdkdkdd".getBytes());
+                    Algorithm algorithm = Algorithm.HMAC256(secretyKey.getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
