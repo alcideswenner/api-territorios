@@ -19,7 +19,10 @@ import com.alcideswenner.apiterritorios.entities.Mapa;
         m.numero_territorio AS numeroTerritorio,
         d.data_carencia AS dataCarencia,
         d.id  AS designacaoId,
-        u.id AS userAtual
+        u.id AS userAtual,
+		CASE WHEN d.data_carencia IS NOT NULL THEN ''
+		WHEN u.name IS NOT NULL THEN u.name
+		ELSE '' END AS nomeUserAtual
     FROM TB_MAPA m
     LEFT JOIN TB_DESIGNACAO d ON (d.DESIGNACAO_MAPA = m.ID AND d.id =
         (SELECT MAX(TB_DESIGNACAO.id)
@@ -37,6 +40,7 @@ import com.alcideswenner.apiterritorios.entities.Mapa;
         @ColumnResult(name = "userAtual", type = Long.class),
         @ColumnResult(name = "designacaoId", type = Long.class),
         @ColumnResult(name = "urlGoogleMaps", type = String.class),
+        @ColumnResult(name = "nomeUserAtual", type = String.class),
 }))
 public class ResultSqlMapa extends Mapa {
 }

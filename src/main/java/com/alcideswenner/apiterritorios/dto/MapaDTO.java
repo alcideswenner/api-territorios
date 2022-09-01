@@ -31,8 +31,10 @@ public class MapaDTO {
 
     private String msgDataCarencia;
 
+    private String nomeUserAtual;
+
     public MapaDTO(Long id, String urlMapa, String nome, Integer numeroTerritorio, Boolean status,
-            LocalDateTime dataCarencia, Long userAtual, Long designacaoId, String urlGoogleMaps) {
+            LocalDateTime dataCarencia, Long userAtual, Long designacaoId, String urlGoogleMaps, String nomeUserAtual) {
         this.id = id;
         this.urlMapa = urlMapa;
         this.nome = nome;
@@ -42,6 +44,7 @@ public class MapaDTO {
         this.userAtual = userAtual;
         this.designacaoId = designacaoId;
         this.urlGoogleMaps = urlGoogleMaps;
+        this.nomeUserAtual = nomeUserAtual;
     }
 
     public MapaDTO(Mapa mapa) {
