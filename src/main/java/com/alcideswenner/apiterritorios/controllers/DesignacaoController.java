@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,7 @@ public class DesignacaoController {
                 : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('SYSTEM','ADMIN', 'USER')")
     @PostMapping
     public ResponseEntity<?> saveDesignacao(@RequestBody Designacao designacao) {
         Optional<MapaDTO> mapaOpt = mapaService.findMapaByID(designacao.getMapa().getId());
@@ -59,6 +61,7 @@ public class DesignacaoController {
                 : ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasAnyAuthority('SYSTEM','ADMIN', 'USER')")
     @PutMapping("/{id}")
     public ResponseEntity<?> concluirDesignacao(@PathVariable("id") Long id) {
         Optional<Boolean> optDesignacao = Optional.empty();
