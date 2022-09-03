@@ -76,7 +76,7 @@ public class AuthenticationFilterSecurity extends UsernamePasswordAuthentication
 
         String token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(Date.from(now.plus(2, ChronoUnit.DAYS)))
+                .withExpiresAt(Date.from(now.plus(7, ChronoUnit.DAYS)))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles",
                         user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
@@ -85,8 +85,8 @@ public class AuthenticationFilterSecurity extends UsernamePasswordAuthentication
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
         tokenMap.put("validFrom", Date.from(now).toString());
-        tokenMap.put("validUntil", Date.from(now.plus(2, ChronoUnit.DAYS)).toString());
-        tokenMap.put("teste", Date.from(now.plus(2, ChronoUnit.DAYS)).getTime() + "");
+        tokenMap.put("validUntil", Date.from(now.plus(7, ChronoUnit.DAYS)).toString());
+        tokenMap.put("teste", Date.from(now.plus(7, ChronoUnit.DAYS)).getTime() + "");
         tokenMap.put("idUser", userRepository.findByUsername(user.getUsername()).getId());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ObjectMapper objectMapper = new ObjectMapper();
