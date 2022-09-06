@@ -29,6 +29,7 @@ import com.alcideswenner.apiterritorios.entities.Mapa;
         FROM TB_DESIGNACAO
         WHERE TB_DESIGNACAO.DESIGNACAO_MAPA = d.designacao_mapa))
     LEFT JOIN tb_user u ON u.id = d.designacao_user
+    ORDER BY TB_DESIGNACAO.data_designacao DESC
             """, resultSetMapping = "find_all_mapas_result")
 @SqlResultSetMapping(name = "find_all_mapas_result", classes = @ConstructorResult(targetClass = MapaDTO.class, columns = {
         @ColumnResult(name = "id", type = Long.class),
