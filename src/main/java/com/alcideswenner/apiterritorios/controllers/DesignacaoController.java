@@ -86,4 +86,11 @@ public class DesignacaoController {
                 : ResponseEntity.notFound().build();
     }
 
+    @GetMapping(value = "historico-designacao")
+    public ResponseEntity<?> findAllHistoricoDesignacao() {
+        return designacaoService.findAllHistoricoDesignacao().isPresent()
+                ? ResponseEntity.ok().body(designacaoService.findAllHistoricoDesignacao().get())
+                : ResponseEntity.notFound().build();
+    }
+
 }
