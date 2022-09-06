@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.alcideswenner.apiterritorios.dto.DesignacaoDTO;
+import com.alcideswenner.apiterritorios.dto.HistoricoDesignacaoDTO;
 import com.alcideswenner.apiterritorios.entities.Designacao;
 import com.alcideswenner.apiterritorios.exceptions.DesignacaoNotFoundException;
 import com.alcideswenner.apiterritorios.repositories.DesignacaoRepository;
@@ -49,7 +50,7 @@ public class DesignacaoService {
         Designacao designacao = designacaoRepository.findById(id)
                 .orElseThrow(() -> new DesignacaoNotFoundException("Designação não encontrada"));
         userService.isUserReal(designacao.getUser().getId());
-        
+
         if (designacao.getDataConclusao() != null) {
             return Optional.of(Boolean.FALSE);
         }
@@ -69,4 +70,9 @@ public class DesignacaoService {
         }
         return Optional.of(Boolean.TRUE);
     }
+
+    public Optional<List<HistoricoDesignacaoDTO>> findAllHistoricoDesignacao() {
+        return Optional.of(this.findAll().get().stream().map(e -> new HistoricoDesignacaoDTO(e)).toList());
+    }
+
 }
