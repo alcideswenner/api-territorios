@@ -3,6 +3,7 @@ package com.alcideswenner.apiterritorios.services;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +43,8 @@ public class DesignacaoService {
     }
 
     public Optional<List<DesignacaoDTO>> findAll() {
-        return Optional.of(designacaoRepository.findJoinUserMapa().stream().map(DesignacaoDTO::new).toList());
+        return Optional.of(designacaoRepository.findJoinUserMapa().stream().parallel().map(DesignacaoDTO::new)
+                .collect(Collectors.toList()));
     }
 
     @Transactional
@@ -72,7 +74,8 @@ public class DesignacaoService {
     }
 
     public Optional<List<HistoricoDesignacaoDTO>> findAllHistoricoDesignacao() {
-        return Optional.of(this.findAll().get().stream().map(e -> new HistoricoDesignacaoDTO(e)).toList());
+        return Optional.of(designacaoRepository.findJoinUserMapa().stream().sequential().map(e -> new HistoricoDesignacaoDTO(e))
+                .collect(Collectors.toList()));
     }
 
 }
