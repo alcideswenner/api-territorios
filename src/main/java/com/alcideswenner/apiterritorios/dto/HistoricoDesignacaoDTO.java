@@ -1,6 +1,7 @@
 package com.alcideswenner.apiterritorios.dto;
 
 import java.time.LocalDateTime;
+import com.alcideswenner.apiterritorios.entities.Designacao;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,14 +28,14 @@ public class HistoricoDesignacaoDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss", locale = "pt-BR", timezone = "America/Sao_Paulo")
     private LocalDateTime dataConclusao;
 
-    public HistoricoDesignacaoDTO(DesignacaoDTO designacaoDTO) {
-        this.idDesignacao = designacaoDTO.getId();
-        this.idUser = designacaoDTO.getUser().getId();
-        this.idMapa = designacaoDTO.getMapa().getId();
-        this.nomeUser = designacaoDTO.getUser().getName();
-        this.nomeMapa = "Território nº "+designacaoDTO.getMapa().getNumeroTerritorio();
-        this.bairro = designacaoDTO.getMapa().getNome();
-        this.dataDesignacao = designacaoDTO.getDataDesignacao();
-        this.dataConclusao = designacaoDTO.getDataConclusao();
+    public HistoricoDesignacaoDTO(Designacao e) {
+        this.idDesignacao = e.getId();
+        this.idUser = e.getUser().getId();
+        this.idMapa = e.getMapa().getId();
+        this.nomeUser = e.getUser().getName();
+        this.nomeMapa = "Território nº "+e.getMapa().getNumeroTerritorio();
+        this.bairro = e.getMapa().getNome();
+        this.dataDesignacao = e.getDataDesignacao();
+        this.dataConclusao = e.getDataConclusao();
     }
 }
