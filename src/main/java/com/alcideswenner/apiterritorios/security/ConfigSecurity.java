@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,7 +21,7 @@ import com.alcideswenner.apiterritorios.services.UserService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ConfigSecurity {
 
     @Autowired
@@ -41,7 +42,7 @@ public class ConfigSecurity {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests()
-                .antMatchers("/login", "/h2-console/**","/mapas/**","/politica-privacidade/**")
+                .requestMatchers("/login", "/h2-console/**","/mapas/**","/politica-privacidade/**")
                 .permitAll();
         http.addFilter(new AuthenticationFilterSecurity(authManager(http), userRepository, secretyKey));
         http.addFilterBefore(new AuthorizationFilterSecurity(secretyKey), UsernamePasswordAuthenticationFilter.class);

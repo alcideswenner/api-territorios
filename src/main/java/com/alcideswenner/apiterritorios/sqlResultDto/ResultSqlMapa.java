@@ -1,11 +1,7 @@
 package com.alcideswenner.apiterritorios.sqlResultDto;
 
 import java.time.LocalDateTime;
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
-import javax.persistence.Entity;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.SqlResultSetMapping;
+import jakarta.persistence.*;
 import com.alcideswenner.apiterritorios.dto.MapaDTO;
 import com.alcideswenner.apiterritorios.entities.Mapa;
 
